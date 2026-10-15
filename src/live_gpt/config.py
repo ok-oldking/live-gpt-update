@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from .logger import Logger
-from .localization import resolve_language
+from .localization import resolve_language, system_uses_simplified_chinese
 
 
 logger = Logger.get_logger(__name__)
@@ -129,6 +129,8 @@ class Config(dict[str, Any]):
         default: Mapping[str, Any] | None = None,
     ) -> None:
         self.default = copy.deepcopy(dict(default or DEFAULT_CONFIG))
+        if default is None and system_uses_simplified_chinese():
+            self.default["pypi_mirror"] = "ali"
         if "language" in self.default:
             self.default["language"] = resolve_language(self.default["language"])
         self.path = Path(path) if path is not None else default_config_path()

@@ -17,13 +17,22 @@ from PySide6.QtWidgets import (
 from .translations_zh import TRANSLATIONS
 
 
-def resolve_language(preference: str = "") -> str:
-    if preference in ("en", "zh"):
-        return preference
+def _system_language_tag() -> str:
     # uiLanguages reflects the OS display-language preference, including Windows
     # systems whose regional format differs from their interface language.
     languages = QLocale.system().uiLanguages()
     language = languages[0] if languages else QLocale.system().name()
+    return language
+
+
+def system_uses_simplified_chinese() -> bool:
+    return QLocale(_system_language_tag()).script() == QLocale.Script.SimplifiedHanScript
+
+
+def resolve_language(preference: str = "") -> str:
+    if preference in ("en", "zh"):
+        return preference
+    language = _system_language_tag()
     return "zh" if language.replace("_", "-").lower().split("-")[0] == "zh" else "en"
 
 
@@ -198,4 +207,4 @@ class UiTranslations(QObject):
                 widget.blockSignals(blocked)
 
 
-__all__ = ["UiTranslations", "localization", "resolve_language", "translate_message", "tr"]
+__all__ = ["UiTranslations", "localization", "resolve_language", "system_uses_simplified_chinese", "translate_message", "tr"]
