@@ -1,0 +1,9 @@
+# Windows release runtime, including transitive dependencies for --no-deps.
+# LiveAI runs directly from src so code updates do not require reinstalling it.
+greenlet==3.5.5
+playwright==1.62.0
+pyee==13.0.1
+PySide6-Essentials==6.11.2
+shiboken6==6.11.2
+typing-extensions==4.16.0
+websockets==16.1.1
